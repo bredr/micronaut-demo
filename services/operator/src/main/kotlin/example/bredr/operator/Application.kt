@@ -1,4 +1,4 @@
-package example.bredr
+package example.bredr.operator
 
 import io.micronaut.runtime.Micronaut.*
 fun main(args: Array<String>) {

@@ -1,3 +1,15 @@
 micronaut:
   application:
     name: operator
+tracing:
+  zipkin:
+    enabled: true
+    sampler:
+      probability: 1
+endpoints:
+  health:
+    enabled: true
+    sensitive: false
+    details-visible: ANONYMOUS
+    url:
+      enabled: true

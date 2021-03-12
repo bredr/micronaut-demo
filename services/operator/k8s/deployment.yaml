@@ -1,0 +1,51 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: operator
+  labels:
+    app: operator
+spec:
+  selector:
+    app: operator
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: operator
+  labels:
+    app: operator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: operator
+  template:
+    metadata:
+      labels:
+        app: operator
+    spec:
+      containers:
+        - name: service
+          image: operator
+          env:
+            - name: "MICRONAUT_SERVER_PORT"
+              value: "8080"
+            - name: "TRACING_ZIPKIN_HTTP_URL"
+              value: "http://zipkin.default.svc.cluster.local:9411"
+          ports:
+            - containerPort: 8080
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 1
+            periodSeconds: 3
+          startupProbe:
+            httpGet:
+              path: /health
+              port: 8080

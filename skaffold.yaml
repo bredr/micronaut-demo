@@ -1,0 +1,9 @@
+apiVersion: skaffold/v2beta12
+kind: Config
+requires:
+  - path: ./services/operator/
+deploy:
+  kubeContext: minikube
+  kubectl:
+    manifests:
+      - k8s/*

@@ -4,10 +4,11 @@ plugins {
     id("org.jetbrains.kotlin.plugin.allopen") version "1.4.10"
     id("com.github.johnrengelman.shadow") version "6.1.0"
     id("io.micronaut.application") version "1.3.4"
+    id("com.google.cloud.tools.jib") version "2.8.0"
 }
 
 version = "0.1"
-group = "example.bredr"
+group = "example.bredr.operator"
 
 val kotlinVersion=project.properties.get("kotlinVersion")
 repositories {
@@ -19,9 +20,10 @@ micronaut {
     testRuntime("junit5")
     processing {
         incremental(true)
-        annotations("example.bredr.*")
+        annotations("example.bredr.operator.*")
     }
 }
+
 
 dependencies {
     implementation("io.micronaut:micronaut-validation")
@@ -29,14 +31,19 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
     implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
     implementation("io.micronaut:micronaut-runtime")
+    implementation("io.micronaut:micronaut-management")
     implementation("io.micronaut:micronaut-http-client")
     runtimeOnly("ch.qos.logback:logback-classic")
     runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("io.micronaut:micronaut-tracing")
+    runtimeOnly("io.zipkin.brave:brave-instrumentation-http")
+    runtimeOnly("io.zipkin.reporter2:zipkin-reporter")
+    implementation("io.opentracing.brave:brave-opentracing")
 }
 
 
 application {
-    mainClass.set("example.bredr.ApplicationKt")
+    mainClass.set("example.bredr.operator.ApplicationKt")
 }
 
 java {
